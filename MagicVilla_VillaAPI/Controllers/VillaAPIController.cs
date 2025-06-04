@@ -40,6 +40,13 @@ public class VillaAPIController : Controller
         {
             return BadRequest(requestVilla);
         }
+        
+        if(VillaStore.VillaList.FirstOrDefault(v => v.Name.ToLower() == requestVilla.Name.ToLower()) != null)
+        {
+            ModelState.AddModelError("CustomError", "Villa already exists!");
+            return BadRequest(ModelState);
+        }
+
         if (requestVilla == null)
         {
             return BadRequest(requestVilla);
@@ -53,5 +60,24 @@ public class VillaAPIController : Controller
         requestVilla.Id = VillaStore.VillaList.OrderByDescending(v => v.Id).FirstOrDefault().Id + 1;
         VillaStore.VillaList.Add(requestVilla);
         return CreatedAtRoute("GetVilla", new { requestId = requestVilla.Id }, requestVilla);
+    }
+
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public ActionResult<VillaDTO> DeleteVilla(int requestId)
+    {
+        if (requestId <= 0)
+        {
+            return BadRequest("Invalid ID");
+        }
+        var villa = VillaStore.VillaList.FirstOrDefault(v => v.Id == requestId);
+        if (villa == null)
+        {
+            return NotFound();
+        }
+        VillaStore.VillaList.Remove(villa);
+        return NoContent();
     }
 }
