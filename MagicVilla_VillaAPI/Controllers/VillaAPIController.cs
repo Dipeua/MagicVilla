@@ -36,6 +36,10 @@ public class VillaAPIController : Controller
     [ProducesResponseType(StatusCodes.Status201Created)]
     public ActionResult<VillaDTO> CreateVilla([FromBody] VillaDTO requestVilla)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(requestVilla);
+        }
         if (requestVilla == null)
         {
             return BadRequest(requestVilla);
