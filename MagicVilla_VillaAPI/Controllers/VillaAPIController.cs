@@ -62,11 +62,11 @@ public class VillaAPIController : Controller
         return CreatedAtRoute("GetVilla", new { requestId = requestVilla.Id }, requestVilla);
     }
 
-    [HttpDelete]
+    [HttpDelete("{requestId:int}", Name ="DeleteVilla")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public ActionResult<VillaDTO> DeleteVilla(int requestId)
+    public IActionResult DeleteVilla(int requestId)
     {
         if (requestId <= 0)
         {
@@ -80,4 +80,27 @@ public class VillaAPIController : Controller
         VillaStore.VillaList.Remove(villa);
         return NoContent();
     }
+
+    [HttpPut("{requestId:int}", Name = "Update villa")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult UpdateVilla(int requestId, [FromBody] VillaDTO requestVilla)
+    {
+        if (requestId <= 0 || requestVilla == null || (requestId != requestVilla.Id))
+        {
+            return BadRequest("Invalid ID");
+        }
+        var villa = VillaStore.VillaList.FirstOrDefault(v => v.Id == requestId);
+        if (villa == null)
+        {
+            return NotFound();
+        }
+
+        villa.Id = requestVilla.Id;
+        villa.Name = requestVilla.Name;
+
+        return NoContent();
+    }
+
 }
