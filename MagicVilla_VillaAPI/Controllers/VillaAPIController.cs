@@ -11,7 +11,7 @@ namespace MagicVilla_VillaAPI.Controllers;
 [Route("api/VillaAPI")]
 public class VillaAPIController : Controller
 {
-    private readonly ILogger<VillaAPIController> _logger;
+    private readonly ILogger<VillaAPIController> _logger; // This adding logger to the console for debugging purposes
     public VillaAPIController(ILogger<VillaAPIController> logger)
     {
         _logger = logger;
