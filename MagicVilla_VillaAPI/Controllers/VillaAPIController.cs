@@ -99,8 +99,9 @@ public class VillaAPIController : Controller
 
         villa.Id = requestVilla.Id;
         villa.Name = requestVilla.Name;
+        villa.Occupancy = requestVilla.Occupancy;
+        villa.Sqft = requestVilla.Sqft;
 
         return NoContent();
     }
-
 }
